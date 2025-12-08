@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Egyptian History Chatbot</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .background-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='images/image.png') }}");
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px);
+            z-index: -2;
+        }
+
+        .main-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='images/image.png') }}");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+            z-index: -1;
+        }
+
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            margin: 40px auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 85%;
+            overflow-y: auto;
+            justify-content: flex-end;
+        }
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+            max-height: 100%;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #e1e1e1;
+            color: black;
+            align-self: flex-start;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .input-container form {
+            display: flex;
+            width: 100%;
+        }
+
+        .input-container input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-container button {
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            color: #000;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .input-container button:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .content {
+            color: white;
+            text-align: center;
+            padding-top: 30vh;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px #000;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Section -->
+    <div class="background-blur"></div>
+    <div class="main-image"></div>
+
+    <!-- Chat Interface -->
+    <div class="chat-container">
+        <div class="chat-box">
+            <!-- Chat history will be dynamically inserted here -->
+            {% for message in chat_history %}
+                <div class="message {{ message['role'] }}-message">
+                    {{ message['content'] }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-container">
+            <form method="POST" action="/">
+                <input type="text" name="query" placeholder="Ask me anything about Egyptian history" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Auto-scroll to the bottom of the chat
+        const chatBox = document.querySelector('.chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    </script>
+
+</body>
+</html>
